@@ -1,0 +1,21 @@
+<h1>タスクの新規作成</h1>
+
+<%= form_with(model: @task, local: true) do |form| %>  
+<table>
+  <tr>
+    <th>タスクタイトル</th>
+    <th>タスク内容</th>
+  </tr>
+
+  <tr>
+    <td><%= form.text_field :title %></td>
+    <td><%= form.text_area :content %></td>
+  </tr>
+</table>
+
+<%= form.submit %>
+<% end %>
+
+<br>
+
+<%= link_to 'タスク一覧画面', tasks_path %>
