@@ -1,5 +1,7 @@
 <h1>タスクの新規作成</h1>
 
+<p><%= notice %></p>
+
 <%= form_with(model: @task, local: true) do |form| %>
   <% if @task.errors.any? %>
     <div id="error_explanation">

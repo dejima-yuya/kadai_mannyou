@@ -10,6 +10,7 @@ class TasksController < ApplicationController
   def create
     @task = Task.new(task_params)
     if @task.save
+      redirect_to new_task_path, notice: "Task was successfully created."
     else
       render :new
     end
