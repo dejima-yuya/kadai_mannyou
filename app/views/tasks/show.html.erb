@@ -1,0 +1,18 @@
+<h1>タスク詳細</h1>
+<p><%= notice %></p>
+
+<table>
+  <tr>
+    <th>タスクタイトル</th>
+    <th>タスク内容</th>
+  </tr>
+
+  <tr>
+    <td><%= @task.title %></td>
+    <td><%= @task.content %></td>
+  </tr>
+</table>
+
+<br>
+
+<%= link_to 'タスク一覧画面', tasks_path %>
