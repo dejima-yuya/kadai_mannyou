@@ -1,7 +1,7 @@
 <%= form_with(model: @task, local: true) do |form| %>
   <% if @task.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@task.errors.count, "error") %> prohibited this <%= @task.title %> from being saved:</h2>
+      <h2><%= pluralize(@task.errors.count, "個のエラーが発生しました") %> 保存することが出来ません:</h2>
       <ul>
       <% @task.errors.full_messages.each do |message| %>
         <li><%= message %></li>
@@ -12,8 +12,8 @@
 
   <table>
     <tr>
-      <th>タスクタイトル</th>
-      <th>タスク内容</th>
+      <th>タイトル</th>
+      <th>内容</th>
     </tr>
 
     <tr>
