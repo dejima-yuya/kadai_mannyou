@@ -54,3 +54,6 @@
 
 ### step2ブランチで作業を行っていたので、step2ブランチでの変更内容を Heroku の masterブランチに反映する。
 - git push heroku step2:master コマンドを実行する
+
+### マイグレーションを実行する
+- heroku run rails db:migrate コマンドを実行する
