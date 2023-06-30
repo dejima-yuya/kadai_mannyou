@@ -4,6 +4,7 @@ ja:
       task:
         title: タイトル
         content: 内容
+        end_date: 終了期限
   errors:
     format: "%{attribute}%{message}"
     messages:
