@@ -14,11 +14,13 @@
     <tr>
       <th>タイトル</th>
       <th>内容</th>
+      <th>終了期限</th>
     </tr>
 
     <tr>
       <td><%= form.text_field :title %></td>
       <td><%= form.text_area :content %></td>
+      <td><%= form.date_field :end_date %></td>
     </tr>
   </table>
 
