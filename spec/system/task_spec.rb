@@ -55,6 +55,23 @@ RSpec.describe 'タスク管理機能', type: :system do
         expect(task_list[2]).to have_content 'テスト_タイトル1'
       end
     end
+    context '一覧画面内にある「終了期限」のリンクを押した場合' do
+      it 'タスクが終了期限の降順で並んでいる' do
+        # テストで使用するためのタスクを作成
+        FactoryBot.create(:task, title: 'テスト_タイトル1', content: 'テスト_内容1', end_date: '2023-06-30')
+        FactoryBot.create(:task, title: 'テスト_タイトル2', content: 'テスト_内容2', end_date: '2023-06-29')
+        FactoryBot.create(:task, title: 'テスト_タイトル3', content: 'テスト_内容3', end_date: '2023-06-28')
+        # タスク一覧ページに遷移
+        visit tasks_path
+        # 「終了期限」というvalue（表記文字）のあるボタンをclick_onする（クリックする）
+        click_on '終了期限'
+        # タスクが終了期限の降順で表示されているかを確認する
+        task_list = all('.task_list') 
+        expect(task_list[0]).to have_content 'テスト_タイトル1'
+        expect(task_list[1]).to have_content 'テスト_タイトル2'
+        expect(task_list[2]).to have_content 'テスト_タイトル3'
+      end
+    end
   end
   describe '詳細表示機能' do
      context '任意のタスク詳細画面に遷移した場合' do
