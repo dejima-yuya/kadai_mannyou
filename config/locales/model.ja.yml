@@ -5,6 +5,7 @@ ja:
         title: タイトル
         content: 内容
         end_date: 終了期限
+        status: ステータス
   errors:
     format: "%{attribute}%{message}"
     messages:
