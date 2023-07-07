@@ -7,11 +7,13 @@ class TasksController < ApplicationController
         @tasks = Task.where("title LIKE ?", "%#{params[:task][:title]}%")
       elsif params[:task][:status].present?
         @tasks = Task.where(status: params[:task][:status])
-      elsif params[:sort_expired]
-        @tasks = Task.all.order(end_date: :DESC)
       else
         @tasks = Task.all.order(created_at: :DESC)
       end
+    elsif params[:sort_expired]
+      @tasks = Task.all.order(end_date: :DESC)
+    else
+      @tasks = Task.all.order(created_at: :DESC)
     end
   end
 
