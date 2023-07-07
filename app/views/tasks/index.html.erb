@@ -10,6 +10,7 @@
 
     <tr>
       <td><%= form.text_field :title %></td>
+      <td><%= form.select :status, [["",""],["未着手","未着手"],["着手中","着手中"],["完了","完了"]] %></td>
     </tr>
   </table>
 
