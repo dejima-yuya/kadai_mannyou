@@ -1,6 +1,23 @@
 <h1>タスク一覧</h1>
 <p><%= notice %></p>
 
+<%= form_with(url: tasks_path, method: :get, scope: :task, local: true) do |form| %>
+  <table>
+    <tr>
+      <th>タイトル</th>
+      <th>ステータス</th>
+    </tr>
+
+    <tr>
+      <td><%= form.text_field :title %></td>
+    </tr>
+  </table>
+
+  <%= form.submit "検索" %>
+<% end %>
+
+<br>
+
 <table>
   <tr>
     <th>タイトル</th>
