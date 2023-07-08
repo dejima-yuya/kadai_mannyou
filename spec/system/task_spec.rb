@@ -27,17 +27,21 @@ RSpec.describe 'タスク管理機能', type: :system do
       end
     end
   end
+
   describe '一覧表示機能' do
+    before do
+      FactoryBot.create(:task, title: 'テスト_タイトル1', content: 'テスト_内容1', end_date: '2023-06-30', status: '未着手')
+      FactoryBot.create(:task, title: 'テスト_タイトル2', content: 'テスト_内容2', end_date: '2023-06-29', status: '着手中')
+      FactoryBot.create(:task, title: 'テスト_タイトル3', content: 'テスト_内容3', end_date: '2023-06-28', status: '完了')
+    end
     context '一覧画面に遷移した場合' do
       it '作成済みのタスク一覧が表示される' do
-        # テストで使用するためのタスクを作成
-        FactoryBot.create(:task, title: 'テスト_タイトル', content: 'テスト_内容', end_date: '2023-06-30', status: '未着手')
         # タスク一覧ページに遷移
         visit tasks_path
         # visitした（遷移した）page（タスク一覧ページ）に「task」という文字列が
         # have_contentされているか（含まれているか）ということをexpectする（確認・期待する）
-        expect(page).to have_content 'テスト_タイトル'
-        expect(page).to have_content 'テスト_内容'
+        expect(page).to have_content 'テスト_タイトル1'
+        expect(page).to have_content 'テスト_内容1'
         expect(page).to have_content '2023-06-30'
         expect(page).to have_content '未着手'
         # expectの結果が true ならテスト成功、false なら失敗として結果が出力される
@@ -45,10 +49,6 @@ RSpec.describe 'タスク管理機能', type: :system do
     end
     context '一覧画面に遷移した場合' do
       it 'タスクが作成日時の降順で並んでいる' do
-        # テストで使用するためのタスクを作成
-        FactoryBot.create(:task, title: 'テスト_タイトル1', content: 'テスト_内容1', end_date: '2023-06-30', status: '未着手')
-        FactoryBot.create(:task, title: 'テスト_タイトル2', content: 'テスト_内容2', end_date: '2023-06-29', status: '着手中')
-        FactoryBot.create(:task, title: 'テスト_タイトル3', content: 'テスト_内容3', end_date: '2023-06-28', status: '完了')
         # タスク一覧ページに遷移
         visit tasks_path
         # タスクが作成日時の降順で表示されているかを確認する
@@ -60,10 +60,6 @@ RSpec.describe 'タスク管理機能', type: :system do
     end
     context '一覧画面内にある「終了期限」のリンクを押した場合' do
       it 'タスクが終了期限の降順で並んでいる' do
-        # テストで使用するためのタスクを作成
-        FactoryBot.create(:task, title: 'テスト_タイトル1', content: 'テスト_内容1', end_date: '2023-06-30', status: '未着手')
-        FactoryBot.create(:task, title: 'テスト_タイトル2', content: 'テスト_内容2', end_date: '2023-06-29', status: '着手中')
-        FactoryBot.create(:task, title: 'テスト_タイトル3', content: 'テスト_内容3', end_date: '2023-06-28', status: '完了')
         # タスク一覧ページに遷移
         visit tasks_path
         # 「終了期限」というvalue（表記文字）のあるボタンをclick_onする（クリックする）
@@ -76,6 +72,7 @@ RSpec.describe 'タスク管理機能', type: :system do
       end
     end
   end
+
   describe '詳細表示機能' do
      context '任意のタスク詳細画面に遷移した場合' do
         it '該当タスクの内容が表示される' do
@@ -92,13 +89,15 @@ RSpec.describe 'タスク管理機能', type: :system do
         end
      end
   end
+  
   describe '検索機能' do
+    before do
+      FactoryBot.create(:task, title: 'テスト_タイトル1', content: 'テスト_内容1', end_date: '2023-06-30', status: '未着手')
+      FactoryBot.create(:task, title: 'テスト_タイトル2', content: 'テスト_内容2', end_date: '2023-06-29', status: '着手中')
+      FactoryBot.create(:task, title: 'テスト_タイトル3', content: 'テスト_内容3', end_date: '2023-06-28', status: '完了')
+    end
     context 'タイトルであいまい検索をした場合' do
       it "検索キーワードを含むタスクが絞り込まれる" do
-        # テストで使用するためのタスクを作成
-        FactoryBot.create(:task, title: 'テスト_タイトル1', content: 'テスト_内容1', end_date: '2023-06-30', status: '未着手')
-        FactoryBot.create(:task, title: 'テスト_タイトル2', content: 'テスト_内容2', end_date: '2023-06-29', status: '着手中')
-        FactoryBot.create(:task, title: 'テスト_タイトル3', content: 'テスト_内容3', end_date: '2023-06-28', status: '完了')
         # タスク一覧ページに遷移
         visit tasks_path
         # タスクの検索欄に検索ワードを入力する
@@ -113,10 +112,6 @@ RSpec.describe 'タスク管理機能', type: :system do
     end
     context 'ステータス検索をした場合' do
       it "ステータスに完全一致するタスクが絞り込まれる" do
-        # テストで使用するためのタスクを作成
-        FactoryBot.create(:task, title: 'テスト_タイトル1', content: 'テスト_内容1', end_date: '2023-06-30', status: '未着手')
-        FactoryBot.create(:task, title: 'テスト_タイトル2', content: 'テスト_内容2', end_date: '2023-06-29', status: '着手中')
-        FactoryBot.create(:task, title: 'テスト_タイトル3', content: 'テスト_内容3', end_date: '2023-06-28', status: '完了')
         # タスク一覧ページに遷移
         visit tasks_path
         # プルダウンを選択する
@@ -129,10 +124,6 @@ RSpec.describe 'タスク管理機能', type: :system do
     end
     context 'タイトルとステータスの両方で検索をした場合' do
       it "検索キーワードをタイトルに含み、かつステータスに完全一致するタスクが絞り込まれる" do
-        # テストで使用するためのタスクを作成
-        FactoryBot.create(:task, title: 'テスト_タイトル1', content: 'テスト_内容1', end_date: '2023-06-30', status: '未着手')
-        FactoryBot.create(:task, title: 'テスト_タイトル2', content: 'テスト_内容2', end_date: '2023-06-29', status: '着手中')
-        FactoryBot.create(:task, title: 'テスト_タイトル3', content: 'テスト_内容3', end_date: '2023-06-28', status: '完了')
         # タスク一覧ページに遷移
         visit tasks_path
         # タスクの検索欄に検索ワードを入力する
