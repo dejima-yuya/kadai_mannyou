@@ -13,15 +13,17 @@ RSpec.describe 'タスク管理機能', type: :system do
         fill_in 'task[title]', with: 'テスト_タイトル'
         fill_in 'task[content]', with: 'テスト_内容'
         fill_in 'task[end_date]', with: '002023-06-30'
+        select '未着手', from: 'task[status]'
         # 3. 「登録する」というvalue（表記文字）のあるボタンをクリックする
         # ここに「登録する」というvalue（表記文字）のあるボタンをclick_onする（クリックする）する処理を書く
         click_on '登録する'
         # 4. clickで登録されたはずの情報が、タスク詳細ページに表示されているかを確認する
         # （タスクが登録されたらタスク詳細画面に遷移されるという前提）
         # ここにタスク詳細ページに、テストコードで作成したデータがタスク詳細画面にhave_contentされているか（含まれているか）を確認（期待）するコードを書く
-        expect(page).to have_content('テスト_タイトル')
-        expect(page).to have_content('テスト_内容')
-        expect(page).to have_content('2023-06-30')
+        expect(page).to have_content 'テスト_タイトル'
+        expect(page).to have_content 'テスト_内容'
+        expect(page).to have_content '2023-06-30'
+        expect(page).to have_content '未着手'
       end
     end
   end
@@ -29,7 +31,7 @@ RSpec.describe 'タスク管理機能', type: :system do
     context '一覧画面に遷移した場合' do
       it '作成済みのタスク一覧が表示される' do
         # テストで使用するためのタスクを作成
-        FactoryBot.create(:task, title: 'テスト_タイトル', content: 'テスト_内容', end_date: '2023-06-30')
+        FactoryBot.create(:task, title: 'テスト_タイトル', content: 'テスト_内容', end_date: '2023-06-30', status: '未着手')
         # タスク一覧ページに遷移
         visit tasks_path
         # visitした（遷移した）page（タスク一覧ページ）に「task」という文字列が
@@ -37,15 +39,16 @@ RSpec.describe 'タスク管理機能', type: :system do
         expect(page).to have_content 'テスト_タイトル'
         expect(page).to have_content 'テスト_内容'
         expect(page).to have_content '2023-06-30'
+        expect(page).to have_content '未着手'
         # expectの結果が true ならテスト成功、false なら失敗として結果が出力される
       end
     end
     context '一覧画面に遷移した場合' do
       it 'タスクが作成日時の降順で並んでいる' do
         # テストで使用するためのタスクを作成
-        FactoryBot.create(:task, title: 'テスト_タイトル1', content: 'テスト_内容1', end_date: '2023-06-30')
-        FactoryBot.create(:task, title: 'テスト_タイトル2', content: 'テスト_内容2', end_date: '2023-06-29')
-        FactoryBot.create(:task, title: 'テスト_タイトル3', content: 'テスト_内容3', end_date: '2023-06-28')
+        FactoryBot.create(:task, title: 'テスト_タイトル1', content: 'テスト_内容1', end_date: '2023-06-30', status: '未着手')
+        FactoryBot.create(:task, title: 'テスト_タイトル2', content: 'テスト_内容2', end_date: '2023-06-29', status: '着手中')
+        FactoryBot.create(:task, title: 'テスト_タイトル3', content: 'テスト_内容3', end_date: '2023-06-28', status: '完了')
         # タスク一覧ページに遷移
         visit tasks_path
         # タスクが作成日時の降順で表示されているかを確認する
@@ -58,9 +61,9 @@ RSpec.describe 'タスク管理機能', type: :system do
     context '一覧画面内にある「終了期限」のリンクを押した場合' do
       it 'タスクが終了期限の降順で並んでいる' do
         # テストで使用するためのタスクを作成
-        FactoryBot.create(:task, title: 'テスト_タイトル1', content: 'テスト_内容1', end_date: '2023-06-30')
-        FactoryBot.create(:task, title: 'テスト_タイトル2', content: 'テスト_内容2', end_date: '2023-06-29')
-        FactoryBot.create(:task, title: 'テスト_タイトル3', content: 'テスト_内容3', end_date: '2023-06-28')
+        FactoryBot.create(:task, title: 'テスト_タイトル1', content: 'テスト_内容1', end_date: '2023-06-30', status: '未着手')
+        FactoryBot.create(:task, title: 'テスト_タイトル2', content: 'テスト_内容2', end_date: '2023-06-29', status: '着手中')
+        FactoryBot.create(:task, title: 'テスト_タイトル3', content: 'テスト_内容3', end_date: '2023-06-28', status: '完了')
         # タスク一覧ページに遷移
         visit tasks_path
         # 「終了期限」というvalue（表記文字）のあるボタンをclick_onする（クリックする）
@@ -76,11 +79,16 @@ RSpec.describe 'タスク管理機能', type: :system do
   describe '詳細表示機能' do
      context '任意のタスク詳細画面に遷移した場合' do
         it '該当タスクの内容が表示される' do
-          task = FactoryBot.create(:task, title: 'テスト_タイトル', content: 'テスト_内容', end_date: '2023-06-30')
+          # テストで使用するためのタスクを作成し、変数taskに代入する
+          task = FactoryBot.create(:task, title: 'テスト_タイトル', content: 'テスト_内容', end_date: '2023-06-30', status: '未着手')
+          # 引数taskを持ちながらタスク一覧ページに遷移
           visit task_path(task)
+          # visitした（遷移した）page（タスク一覧ページ）に文字列が
+          # have_contentされているか（含まれているか）ということをexpectする（確認・期待する）
           expect(page).to have_content 'テスト_タイトル'
           expect(page).to have_content 'テスト_内容'
           expect(page).to have_content '2023-06-30'
+          expect(page).to have_content '未着手'
         end
      end
   end
