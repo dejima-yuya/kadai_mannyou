@@ -2,11 +2,11 @@ class TasksController < ApplicationController
   def index
     if params[:task].present?
       if params[:task][:title].present? && params[:task][:status].present?
-        @tasks = Task.search_title_status(params)
+        @tasks = Task.search_title_status(params[:task][:title], params[:task][:status])
       elsif params[:task][:title].present?
-        @tasks = Task.search_title(params)
+        @tasks = Task.search_title(params[:task][:title])
       elsif params[:task][:status].present?
-        @tasks = Task.search_status(params)
+        @tasks = Task.search_status(params[:task][:status])
       else
         @tasks = Task.all.order(created_at: :DESC)
       end

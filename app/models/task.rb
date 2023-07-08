@@ -4,7 +4,7 @@ class Task < ApplicationRecord
   validates :end_date, presence: true
   validates :status, presence: true
 
-  scope :search_title_status,  -> (params){ where("title LIKE ?", "%#{params[:task][:title]}%").where(status: params[:task][:status]) }
-  scope :search_title,  -> (params){ where("title LIKE ?", "%#{params[:task][:title]}%") }
-  scope :search_status,  -> (params){ where(status: params[:task][:status]) }
+  scope :search_title_status,  -> (title, status){ where('title LIKE ?',"%#{title}%").where(status: status) }
+  scope :search_title,  -> (title){ where('title LIKE ?',"%#{title}%") }
+  scope :search_status,  -> (status){ where(status: status) }
 end
