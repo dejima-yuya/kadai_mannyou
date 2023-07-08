@@ -92,4 +92,58 @@ RSpec.describe 'タスク管理機能', type: :system do
         end
      end
   end
+  describe '検索機能' do
+    context 'タイトルであいまい検索をした場合' do
+      it "検索キーワードを含むタスクが絞り込まれる" do
+        # テストで使用するためのタスクを作成
+        FactoryBot.create(:task, title: 'テスト_タイトル1', content: 'テスト_内容1', end_date: '2023-06-30', status: '未着手')
+        FactoryBot.create(:task, title: 'テスト_タイトル2', content: 'テスト_内容2', end_date: '2023-06-29', status: '着手中')
+        FactoryBot.create(:task, title: 'テスト_タイトル3', content: 'テスト_内容3', end_date: '2023-06-28', status: '完了')
+        # タスク一覧ページに遷移
+        visit tasks_path
+        # タスクの検索欄に検索ワードを入力する
+        fill_in 'task[title]', with: 'テスト'
+        # 検索ボタンを押す
+        click_on '検索'
+        # 検索されたタスクが表示されているかを確認する
+        expect(page).to have_content 'テスト_タイトル1'
+        expect(page).to have_content 'テスト_タイトル2'
+        expect(page).to have_content 'テスト_タイトル3'
+      end
+    end
+    context 'ステータス検索をした場合' do
+      it "ステータスに完全一致するタスクが絞り込まれる" do
+        # テストで使用するためのタスクを作成
+        FactoryBot.create(:task, title: 'テスト_タイトル1', content: 'テスト_内容1', end_date: '2023-06-30', status: '未着手')
+        FactoryBot.create(:task, title: 'テスト_タイトル2', content: 'テスト_内容2', end_date: '2023-06-29', status: '着手中')
+        FactoryBot.create(:task, title: 'テスト_タイトル3', content: 'テスト_内容3', end_date: '2023-06-28', status: '完了')
+        # タスク一覧ページに遷移
+        visit tasks_path
+        # プルダウンを選択する
+        select '未着手', from: 'task[status]'
+        # 検索ボタンを押す
+        click_on '検索'
+        # 検索されたタスクが表示されているかを確認する
+        expect(page).to have_content 'テスト_タイトル1'
+      end
+    end
+    context 'タイトルとステータスの両方で検索をした場合' do
+      it "検索キーワードをタイトルに含み、かつステータスに完全一致するタスクが絞り込まれる" do
+        # テストで使用するためのタスクを作成
+        FactoryBot.create(:task, title: 'テスト_タイトル1', content: 'テスト_内容1', end_date: '2023-06-30', status: '未着手')
+        FactoryBot.create(:task, title: 'テスト_タイトル2', content: 'テスト_内容2', end_date: '2023-06-29', status: '着手中')
+        FactoryBot.create(:task, title: 'テスト_タイトル3', content: 'テスト_内容3', end_date: '2023-06-28', status: '完了')
+        # タスク一覧ページに遷移
+        visit tasks_path
+        # タスクの検索欄に検索ワードを入力する
+        # プルダウンを選択する
+        fill_in 'task[title]', with: 'テスト'
+        select '未着手', from: 'task[status]'
+        # 検索ボタンを押す
+        click_on '検索'
+        # 検索されたタスクが表示されているかを確認する
+        expect(page).to have_content 'テスト_タイトル1'
+      end
+    end
+  end
 end
