@@ -12,6 +12,8 @@ class TasksController < ApplicationController
       end
     elsif params[:sort_expired]
       @tasks = Task.all.order(end_date: :DESC)
+    elsif params[:sort_priority]
+      @tasks = Task.all.order(priority: :ASC)
     else
       @tasks = Task.all.order(created_at: :DESC)
     end
