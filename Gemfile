@@ -34,6 +34,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'factory_bot_rails'
   gem 'rexml'
+  gem 'pry-rails'
 end
 
 group :development do
@@ -60,3 +61,4 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'net-smtp'
 gem 'net-imap'
 gem 'net-pop'
+gem 'kaminari'

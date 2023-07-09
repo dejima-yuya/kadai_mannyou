@@ -1,0 +1,13 @@
+ja:
+  activerecord:
+    attributes:
+      task:
+        title: タイトル
+        content: 内容
+        end_date: 終了期限
+        status: ステータス
+  errors:
+    format: "%{attribute}%{message}"
+    messages:
+      blank: を入力してください
+      too_long: は%{count}文字以内で入力してください
