@@ -74,24 +74,37 @@ RSpec.describe 'タスク管理機能', type: :system do
         expect(task_list[2]).to have_content 'テスト_タイトル3'
       end
     end
+    context '一覧画面内にある「優先順位」のリンクを押した場合' do
+      it 'タスクが優先順位の高い順で並んでいる' do
+        # タスク一覧ページに遷移
+        visit tasks_path
+        # 「終了期限」というvalue（表記文字）のあるボタンをclick_onする（クリックする）
+        click_on '優先順位'
+        # タスクが終了期限の降順で表示されているかを確認する
+        task_list = all('.task_list') 
+        expect(task_list[0]).to have_content 'テスト_タイトル3'
+        expect(task_list[1]).to have_content 'テスト_タイトル2'
+        expect(task_list[2]).to have_content 'テスト_タイトル1'
+      end
+    end
   end
 
   describe '詳細表示機能' do
-     context '任意のタスク詳細画面に遷移した場合' do
-        it '該当タスクの内容が表示される' do
-          # テストで使用するためのタスクを作成し、変数taskに代入する
-          task = FactoryBot.create(:task, title: 'テスト_タイトル', content: 'テスト_内容', end_date: '2023-06-30', status: '未着手', priority: '低')
-          # 引数taskを持ちながらタスク一覧ページに遷移
-          visit task_path(task)
-          # visitした（遷移した）page（タスク一覧ページ）に文字列が
-          # have_contentされているか（含まれているか）ということをexpectする（確認・期待する）
-          expect(page).to have_content 'テスト_タイトル'
-          expect(page).to have_content 'テスト_内容'
-          expect(page).to have_content '2023-06-30'
-          expect(page).to have_content '未着手'
-          expect(page).to have_content '低'
-        end
-     end
+    context '任意のタスク詳細画面に遷移した場合' do
+      it '該当タスクの内容が表示される' do
+        # テストで使用するためのタスクを作成し、変数taskに代入する
+        task = FactoryBot.create(:task, title: 'テスト_タイトル', content: 'テスト_内容', end_date: '2023-06-30', status: '未着手', priority: '低')
+        # 引数taskを持ちながらタスク一覧ページに遷移
+        visit task_path(task)
+        # visitした（遷移した）page（タスク一覧ページ）に文字列が
+        # have_contentされているか（含まれているか）ということをexpectする（確認・期待する）
+        expect(page).to have_content 'テスト_タイトル'
+        expect(page).to have_content 'テスト_内容'
+        expect(page).to have_content '2023-06-30'
+        expect(page).to have_content '未着手'
+        expect(page).to have_content '低'
+      end
+    end
   end
   
   describe '検索機能' do
