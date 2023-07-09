@@ -68,6 +68,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         # 「終了期限」というvalue（表記文字）のあるボタンをclick_onする（クリックする）
         click_on '終了期限'
         # タスクが終了期限の降順で表示されているかを確認する
+        sleep(0.5)
         task_list = all('.task_list') 
         expect(task_list[0]).to have_content 'テスト_タイトル1'
         expect(task_list[1]).to have_content 'テスト_タイトル2'
@@ -78,9 +79,10 @@ RSpec.describe 'タスク管理機能', type: :system do
       it 'タスクが優先順位の高い順で並んでいる' do
         # タスク一覧ページに遷移
         visit tasks_path
-        # 「終了期限」というvalue（表記文字）のあるボタンをclick_onする（クリックする）
+        # 「優先順位」というvalue（表記文字）のあるボタンをclick_onする（クリックする）
         click_on '優先順位'
-        # タスクが終了期限の降順で表示されているかを確認する
+        # タスクが優先順位の高い順で表示されているかを確認する
+        sleep(0.5)
         task_list = all('.task_list') 
         expect(task_list[0]).to have_content 'テスト_タイトル3'
         expect(task_list[1]).to have_content 'テスト_タイトル2'
