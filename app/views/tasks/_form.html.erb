@@ -16,6 +16,7 @@
       <th>内容</th>
       <th>終了期限</th>
       <th>ステータス</th>
+      <th>優先順位</th>
     </tr>
 
     <tr>
@@ -23,6 +24,7 @@
       <td><%= form.text_area :content %></td>
       <td><%= form.date_field :end_date %></td>
       <td><%= form.select :status, [["", ""],["未着手", "未着手"], ["着手中", "着手中"], ["完了", "完了"]] %></td>
+      <td><%= form.select :priority, Task.priorities.keys.map { |k| [t("enum.task.priority.#{k}"), k] } %></td>
     </tr>
   </table>
 
