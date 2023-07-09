@@ -14,6 +14,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         fill_in 'task[content]', with: 'テスト_内容'
         fill_in 'task[end_date]', with: '002023-06-30'
         select '未着手', from: 'task[status]'
+        select '高', from: 'task[priority]'
         # 3. 「登録する」というvalue（表記文字）のあるボタンをクリックする
         # ここに「登録する」というvalue（表記文字）のあるボタンをclick_onする（クリックする）する処理を書く
         click_on '登録する'
@@ -24,15 +25,16 @@ RSpec.describe 'タスク管理機能', type: :system do
         expect(page).to have_content 'テスト_内容'
         expect(page).to have_content '2023-06-30'
         expect(page).to have_content '未着手'
+        expect(page).to have_content '高'
       end
     end
   end
 
   describe '一覧表示機能' do
     before do
-      FactoryBot.create(:task, title: 'テスト_タイトル1', content: 'テスト_内容1', end_date: '2023-06-30', status: '未着手')
-      FactoryBot.create(:task, title: 'テスト_タイトル2', content: 'テスト_内容2', end_date: '2023-06-29', status: '着手中')
-      FactoryBot.create(:task, title: 'テスト_タイトル3', content: 'テスト_内容3', end_date: '2023-06-28', status: '完了')
+      FactoryBot.create(:task, title: 'テスト_タイトル1', content: 'テスト_内容1', end_date: '2023-06-30', status: '未着手', priority: '低')
+      FactoryBot.create(:task, title: 'テスト_タイトル2', content: 'テスト_内容2', end_date: '2023-06-29', status: '着手中', priority: '中')
+      FactoryBot.create(:task, title: 'テスト_タイトル3', content: 'テスト_内容3', end_date: '2023-06-28', status: '完了', priority: '高')
     end
     context '一覧画面に遷移した場合' do
       it '作成済みのタスク一覧が表示される' do
@@ -44,6 +46,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         expect(page).to have_content 'テスト_内容1'
         expect(page).to have_content '2023-06-30'
         expect(page).to have_content '未着手'
+        expect(page).to have_content '低'
         # expectの結果が true ならテスト成功、false なら失敗として結果が出力される
       end
     end
@@ -77,7 +80,7 @@ RSpec.describe 'タスク管理機能', type: :system do
      context '任意のタスク詳細画面に遷移した場合' do
         it '該当タスクの内容が表示される' do
           # テストで使用するためのタスクを作成し、変数taskに代入する
-          task = FactoryBot.create(:task, title: 'テスト_タイトル', content: 'テスト_内容', end_date: '2023-06-30', status: '未着手')
+          task = FactoryBot.create(:task, title: 'テスト_タイトル', content: 'テスト_内容', end_date: '2023-06-30', status: '未着手', priority: '低')
           # 引数taskを持ちながらタスク一覧ページに遷移
           visit task_path(task)
           # visitした（遷移した）page（タスク一覧ページ）に文字列が
@@ -86,15 +89,16 @@ RSpec.describe 'タスク管理機能', type: :system do
           expect(page).to have_content 'テスト_内容'
           expect(page).to have_content '2023-06-30'
           expect(page).to have_content '未着手'
+          expect(page).to have_content '低'
         end
      end
   end
   
   describe '検索機能' do
     before do
-      FactoryBot.create(:task, title: 'テスト_タイトル1', content: 'テスト_内容1', end_date: '2023-06-30', status: '未着手')
-      FactoryBot.create(:task, title: 'テスト_タイトル2', content: 'テスト_内容2', end_date: '2023-06-29', status: '着手中')
-      FactoryBot.create(:task, title: 'テスト_タイトル3', content: 'テスト_内容3', end_date: '2023-06-28', status: '完了')
+      FactoryBot.create(:task, title: 'テスト_タイトル1', content: 'テスト_内容1', end_date: '2023-06-30', status: '未着手', priority: '低')
+      FactoryBot.create(:task, title: 'テスト_タイトル2', content: 'テスト_内容2', end_date: '2023-06-29', status: '着手中', priority: '中')
+      FactoryBot.create(:task, title: 'テスト_タイトル3', content: 'テスト_内容3', end_date: '2023-06-28', status: '完了', priority: '高')
     end
     context 'タイトルであいまい検索をした場合' do
       it "検索キーワードを含むタスクが絞り込まれる" do
