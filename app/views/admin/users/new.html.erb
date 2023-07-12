@@ -1,0 +1,35 @@
+<h1>ユーザーの作成</h1>
+
+<%= form_with(url: admin_users_path(@user), local: true) do |form| %>
+  <% if @user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user.errors.count, "個のエラーが発生しました") %> :</h2>
+      <ul>
+      <% @user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <table>
+    <tr>
+      <th>アカウント名</th>
+      <th>メールアドレス</th>
+      <th>password</th>
+      <th>passwordの確認</th>
+    </tr>
+    <tr>
+      <td><%= form.text_field :name %></td>
+      <td><%= form.email_field :email %></td>
+      <td><%= form.password_field :password %></td>
+      <td><%= form.password_field :password_confirmation %></td>
+    </tr>
+  </table>
+
+  <%= form.submit "ユーザーを作成" %>
+<% end %>
+
+<br>
+
+<%= link_to 'ユーザー管理', admin_users_path %>
