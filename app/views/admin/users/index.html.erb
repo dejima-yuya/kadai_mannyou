@@ -4,12 +4,14 @@
   <tr>
     <th>ユーザー名</th>
     <th>メールアドレス</th>
+    <th>タスク数</th>
   </tr>
 
   <% @users.each do |user| %>
     <tr>
       <td><%= user.name %></td>
       <td><%= user.email %></td>
+      <td><%= user.tasks.count %></td>
     </tr>
   <% end %>
 </table>
