@@ -1,5 +1,6 @@
 class Admin::UsersController < ApplicationController
   skip_before_action :login_required, only: [:new, :create]
+  before_action :admin_user
 
   def index
     @users = User.select(:id, :name, :email)
@@ -47,5 +48,11 @@ class Admin::UsersController < ApplicationController
 
   def user_params
     params.permit(:name, :email, :password, :password_confirmation)
+  end
+
+  def admin_user
+    unless current_user.admin?
+      redirect_to tasks_path, notice: "管理者以外はアクセスできません！"
+    end
   end
 end
