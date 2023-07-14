@@ -13,8 +13,7 @@ class Admin::UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      flash[:success] = 'ユーザーを作成しました'
-      render :new
+      redirect_to admin_user_path(@user), notice: "ユーザーを作成しました"
     else
       render :new
     end
@@ -27,7 +26,7 @@ class Admin::UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     if @user.update(user_params)
-      redirect_to edit_admin_user_path, notice: "ユーザーを編集しました"
+      redirect_to admin_user_path(@user), notice: "ユーザーを編集しました"
     else
       render :edit
     end
@@ -44,10 +43,28 @@ class Admin::UsersController < ApplicationController
     redirect_to admin_users_path, notice: "ユーザーを削除しました！"
   end
 
+  def grant_admin
+    @user = User.find(params[:id])
+    if @user.update(admin: true)
+      redirect_to admin_users_path, notice: '管理者権限を付与しました'
+    else
+      redirect_to admin_users_path
+    end
+  end
+
+  def deprive_admin
+    @user = User.find(params[:id])
+    if @user.update(admin: false)
+      redirect_to admin_users_path, notice: '管理者権限を解除しました'
+    else
+      redirect_to admin_users_path
+    end
+  end
+  
   private
 
   def user_params
-    params.permit(:name, :email, :password, :password_confirmation)
+    params.permit(:name, :email, :password, :password_confirmation, :admin)
   end
 
   def admin_user

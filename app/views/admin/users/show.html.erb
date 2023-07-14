@@ -10,6 +10,7 @@
     <th><%= link_to "終了期限", tasks_path(sort_expired: "true") %></th>
     <th>ステータス</th>
     <th><%= link_to "優先順位", tasks_path(sort_priority: "true") %></th>
+    <th>ユーザー名</th>
   </tr>
 
   <% @tasks.each do |task| %>
@@ -19,8 +20,9 @@
       <td><%= task.end_date %></td>
       <td><%= task.status %></td>
       <td><%= task.priority %></td>
+      <td><%= task.user.name %></td>
     </tr>
   <% end %>
 </table>
 
-<%= link_to 'ユーザー管理', admin_users_path %>
+<%= link_to 'ユーザー一覧画面', admin_users_path %>
