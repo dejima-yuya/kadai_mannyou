@@ -60,7 +60,7 @@ RSpec.describe 'ユーザー管理機能', type: :system do
         sleep(0.2)
         click_on 'Logout'
         sleep(0.2)
-        expect(page).to have_content 'ログアウトしました'
+        expect(page).to have_content 'ログアウトしました！'
         expect(current_path).to eq new_session_path
       end
     end
@@ -70,6 +70,7 @@ RSpec.describe 'ユーザー管理機能', type: :system do
     before do
       FactoryBot.create(:user1)
       FactoryBot.create(:user2)
+      FactoryBot.create(:user3)
     end
     context '管理ユーザーが管理画面へアクセスした場合' do
       it '管理画面が表示される' do
@@ -84,7 +85,7 @@ RSpec.describe 'ユーザー管理機能', type: :system do
       end
     end
     context '一般ユーザーが管理画面へアクセスした場合' do
-      it '管理画面が表示されず、「管理者以外はアクセスできません」と表示される' do
+      it '管理画面が表示されず、「管理者以外はアクセスできません！」と表示される' do
         visit new_session_path
         fill_in 'session[email]', with: 'test@gmail.com'
         fill_in 'session[password]', with: 'testtest'
@@ -92,7 +93,7 @@ RSpec.describe 'ユーザー管理機能', type: :system do
         sleep(0.2)
         visit admin_users_path
         expect(current_path).to eq tasks_path
-        expect(page).to have_content '管理者以外はアクセスできません'
+        expect(page).to have_content '管理者以外はアクセスできません！'
       end
     end
     context '管理ユーザーがユーザーを新規登録しようとした場合' do
@@ -109,7 +110,7 @@ RSpec.describe 'ユーザー管理機能', type: :system do
         fill_in 'password_confirmation', with: 'testtest'
         click_on 'ユーザーを作成'
         sleep(0.2)
-        expect(page).to have_content 'ユーザーを作成しました'
+        expect(page).to have_content 'ユーザーを作成しました！'
       end
     end
     context '管理ユーザーがユーザーの詳細画面にアクセスしようとすると' do
@@ -139,7 +140,7 @@ RSpec.describe 'ユーザー管理機能', type: :system do
         fill_in 'password_confirmation', with: 'testtest'
         click_on 'ユーザーを編集'
         sleep(0.2)
-        expect(page).to have_content 'ユーザーを編集しました'
+        expect(page).to have_content 'ユーザーを編集しました！'
       end
     end
     context '管理ユーザーがユーザー画面でユーザーを削除しようとすると' do
@@ -153,7 +154,7 @@ RSpec.describe 'ユーザー管理機能', type: :system do
         click_on 'ユーザーを削除する', match: :first
         sleep(0.2)
         page.driver.browser.switch_to.alert.accept
-        expect(page).to have_content 'ユーザーを削除しました'
+        expect(page).to have_content 'ユーザーを削除しました！'
       end
     end
   end
