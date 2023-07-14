@@ -17,6 +17,6 @@ class User < ApplicationRecord
 
   def user_cannot_destroy
     user = User.where(admin: true)
-    throw :abort if User.where(admin: true).count == 1
+    throw :abort if User.where(admin: true).count == 1 && self[:id] == user[0][:id]
   end
 end
