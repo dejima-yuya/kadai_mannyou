@@ -9,6 +9,7 @@ RSpec.describe 'ユーザー管理機能', type: :system do
         fill_in 'user[password]', with: 'testtest'
         fill_in 'user[password_confirmation]', with: 'testtest'
         click_on 'アカウントを作成'
+        sleep(0.2)
         expect(page).to have_content 'テスト_名前'
         expect(page).to have_content 'test@gmail.com'
       end
@@ -33,6 +34,7 @@ RSpec.describe 'ユーザー管理機能', type: :system do
         fill_in 'session[email]', with: 'test@gmail.com'
         fill_in 'session[password]', with: 'testtest'
         click_on 'ログイン'
+        sleep(0.2)
         expect(page).to have_content '一般ユーザ'
         expect(page).to have_content 'test@gmail.com'
         expect(current_path).to eq user_path(1)
@@ -44,7 +46,7 @@ RSpec.describe 'ユーザー管理機能', type: :system do
         fill_in 'session[email]', with: 'test@gmail.com'
         fill_in 'session[password]', with: 'testtest'
         click_on 'ログイン'
-        sleep(0.5)
+        sleep(0.2)
         visit user_path(2)
         expect(current_path).to eq tasks_path
       end
@@ -55,7 +57,9 @@ RSpec.describe 'ユーザー管理機能', type: :system do
         fill_in 'session[email]', with: 'test@gmail.com'
         fill_in 'session[password]', with: 'testtest'
         click_on 'ログイン'
+        sleep(0.2)
         click_on 'Logout'
+        sleep(0.2)
         expect(page).to have_content 'ログアウトしました'
         expect(current_path).to eq new_session_path
       end
@@ -73,7 +77,7 @@ RSpec.describe 'ユーザー管理機能', type: :system do
         fill_in 'session[email]', with: 'admin@gmail.com'
         fill_in 'session[password]', with: 'testtest'
         click_on 'ログイン'
-        sleep(0.5)
+        sleep(0.2)
         visit admin_users_path
         expect(current_path).to eq admin_users_path
         expect(page).to have_content 'ユーザー一覧'
@@ -85,7 +89,7 @@ RSpec.describe 'ユーザー管理機能', type: :system do
         fill_in 'session[email]', with: 'test@gmail.com'
         fill_in 'session[password]', with: 'testtest'
         click_on 'ログイン'
-        sleep(0.5)
+        sleep(0.2)
         visit admin_users_path
         expect(current_path).to eq tasks_path
         expect(page).to have_content '管理者以外はアクセスできません'
@@ -97,13 +101,14 @@ RSpec.describe 'ユーザー管理機能', type: :system do
         fill_in 'session[email]', with: 'admin@gmail.com'
         fill_in 'session[password]', with: 'testtest'
         click_on 'ログイン'
-        sleep(0.5)
+        sleep(0.2)
         visit new_admin_user_path
         fill_in 'name', with: '作成されたユーザー'
         fill_in 'email', with: 'created_user@gmail.com'
         fill_in 'password', with: 'testtest'
         fill_in 'password_confirmation', with: 'testtest'
         click_on 'ユーザーを作成'
+        sleep(0.2)
         expect(page).to have_content 'ユーザーを作成しました'
       end
     end
@@ -113,7 +118,7 @@ RSpec.describe 'ユーザー管理機能', type: :system do
         fill_in 'session[email]', with: 'admin@gmail.com'
         fill_in 'session[password]', with: 'testtest'
         click_on 'ログイン'
-        sleep(0.5)
+        sleep(0.2)
         visit admin_user_path(1)
         expect(current_path).to eq admin_user_path(1)
         expect(page).to have_content 'ユーザー詳細'
@@ -126,12 +131,14 @@ RSpec.describe 'ユーザー管理機能', type: :system do
         fill_in 'session[email]', with: 'admin@gmail.com'
         fill_in 'session[password]', with: 'testtest'
         click_on 'ログイン'
+        sleep(0.2)
         visit edit_admin_user_path(1)
         fill_in 'name', with: '編集されたユーザー'
         fill_in 'email', with: 'edited_user@gmail.com'
         fill_in 'password', with: 'testtest'
         fill_in 'password_confirmation', with: 'testtest'
         click_on 'ユーザーを編集'
+        sleep(0.2)
         expect(page).to have_content 'ユーザーを編集しました'
       end
     end
@@ -141,9 +148,10 @@ RSpec.describe 'ユーザー管理機能', type: :system do
         fill_in 'session[email]', with: 'admin@gmail.com'
         fill_in 'session[password]', with: 'testtest'
         click_on 'ログイン'
-        sleep(0.5)
+        sleep(0.2)
         visit admin_users_path
-        click_on 'ユーザーを削除する', match: :first 
+        click_on 'ユーザーを削除する', match: :first
+        sleep(0.2)
         page.driver.browser.switch_to.alert.accept
         expect(page).to have_content 'ユーザーを削除しました'
       end
