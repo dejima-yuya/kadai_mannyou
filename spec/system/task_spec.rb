@@ -3,6 +3,12 @@ RSpec.describe 'タスク管理機能', type: :system do
   describe '新規作成機能' do
     context 'タスクを新規作成した場合' do
       it '作成したタスクが表示される' do
+        visit new_user_path
+        fill_in 'user[name]', with: 'テスト_アカウント名'
+        fill_in 'user[email]', with: 'test@gmail.com'
+        fill_in 'user[password]', with: 'testtest'
+        fill_in 'user[password_confirmation]', with: 'testtest'
+        click_on 'アカウントを作成'
         # 1. new_task_pathに遷移する（新規作成ページに遷移する）
         visit new_task_path
         # ここにnew_task_pathにvisitする処理を書く
@@ -32,9 +38,15 @@ RSpec.describe 'タスク管理機能', type: :system do
 
   describe '一覧表示機能' do
     before do
-      FactoryBot.create(:task, title: 'テスト_タイトル1', content: 'テスト_内容1', end_date: '2023-06-30', status: '未着手', priority: '低')
-      FactoryBot.create(:task, title: 'テスト_タイトル2', content: 'テスト_内容2', end_date: '2023-06-29', status: '着手中', priority: '中')
-      FactoryBot.create(:task, title: 'テスト_タイトル3', content: 'テスト_内容3', end_date: '2023-06-28', status: '完了', priority: '高')
+      user = FactoryBot.create(:user)
+      FactoryBot.create(:task1, user: user)
+      FactoryBot.create(:task2, user: user)
+      FactoryBot.create(:task3, user: user)
+      visit new_session_path
+      fill_in 'session[email]', with: 'test@gmail.com'
+      fill_in 'session[password]', with: 'testtest'
+      click_on 'ログイン'
+      sleep(0.5)
     end
     context '一覧画面に遷移した場合' do
       it '作成済みのタスク一覧が表示される' do
@@ -67,6 +79,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         visit tasks_path
         # 「終了期限」というvalue（表記文字）のあるボタンをclick_onする（クリックする）
         click_on '終了期限'
+        sleep(0.5)
         # タスクが終了期限の降順で表示されているかを確認する
         task_list = all('.task_list') 
         expect(task_list[0]).to have_content 'テスト_タイトル1'
@@ -78,9 +91,10 @@ RSpec.describe 'タスク管理機能', type: :system do
       it 'タスクが優先順位の高い順で並んでいる' do
         # タスク一覧ページに遷移
         visit tasks_path
-        # 「終了期限」というvalue（表記文字）のあるボタンをclick_onする（クリックする）
+        # 「優先順位」というvalue（表記文字）のあるボタンをclick_onする（クリックする）
         click_on '優先順位'
-        # タスクが終了期限の降順で表示されているかを確認する
+        sleep(0.5)
+        # タスクが優先順位の高い順で表示されているかを確認する
         task_list = all('.task_list') 
         expect(task_list[0]).to have_content 'テスト_タイトル3'
         expect(task_list[1]).to have_content 'テスト_タイトル2'
@@ -93,13 +107,19 @@ RSpec.describe 'タスク管理機能', type: :system do
     context '任意のタスク詳細画面に遷移した場合' do
       it '該当タスクの内容が表示される' do
         # テストで使用するためのタスクを作成し、変数taskに代入する
-        task = FactoryBot.create(:task, title: 'テスト_タイトル', content: 'テスト_内容', end_date: '2023-06-30', status: '未着手', priority: '低')
+        user = FactoryBot.create(:user)
+        task = FactoryBot.create(:task1, user: user)
+        visit new_session_path
+        fill_in 'session[email]', with: 'test@gmail.com'
+        fill_in 'session[password]', with: 'testtest'
+        click_on 'ログイン'
+        sleep(0.5)
         # 引数taskを持ちながらタスク一覧ページに遷移
         visit task_path(task)
         # visitした（遷移した）page（タスク一覧ページ）に文字列が
         # have_contentされているか（含まれているか）ということをexpectする（確認・期待する）
-        expect(page).to have_content 'テスト_タイトル'
-        expect(page).to have_content 'テスト_内容'
+        expect(page).to have_content 'テスト_タイトル1'
+        expect(page).to have_content 'テスト_内容1'
         expect(page).to have_content '2023-06-30'
         expect(page).to have_content '未着手'
         expect(page).to have_content '低'
@@ -109,9 +129,15 @@ RSpec.describe 'タスク管理機能', type: :system do
   
   describe '検索機能' do
     before do
-      FactoryBot.create(:task, title: 'テスト_タイトル1', content: 'テスト_内容1', end_date: '2023-06-30', status: '未着手', priority: '低')
-      FactoryBot.create(:task, title: 'テスト_タイトル2', content: 'テスト_内容2', end_date: '2023-06-29', status: '着手中', priority: '中')
-      FactoryBot.create(:task, title: 'テスト_タイトル3', content: 'テスト_内容3', end_date: '2023-06-28', status: '完了', priority: '高')
+      user = FactoryBot.create(:user)
+      FactoryBot.create(:task1, user: user)
+      FactoryBot.create(:task2, user: user)
+      FactoryBot.create(:task3, user: user)
+      visit new_session_path
+      fill_in 'session[email]', with: 'test@gmail.com'
+      fill_in 'session[password]', with: 'testtest'
+      click_on 'ログイン'
+      sleep(0.5)
     end
     context 'タイトルであいまい検索をした場合' do
       it "検索キーワードを含むタスクが絞り込まれる" do
@@ -121,6 +147,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         fill_in 'task[title]', with: 'テスト'
         # 検索ボタンを押す
         click_on '検索'
+        sleep(0.5)
         # 検索されたタスクが表示されているかを確認する
         expect(page).to have_content 'テスト_タイトル1'
         expect(page).to have_content 'テスト_タイトル2'
@@ -135,6 +162,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         select '未着手', from: 'task[status]'
         # 検索ボタンを押す
         click_on '検索'
+        sleep(0.5)
         # 検索されたタスクが表示されているかを確認する
         expect(page).to have_content 'テスト_タイトル1'
       end
@@ -149,6 +177,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         select '未着手', from: 'task[status]'
         # 検索ボタンを押す
         click_on '検索'
+        sleep(0.5)
         # 検索されたタスクが表示されているかを確認する
         expect(page).to have_content 'テスト_タイトル1'
       end
