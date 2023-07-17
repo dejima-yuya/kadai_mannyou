@@ -7,6 +7,8 @@ class TasksController < ApplicationController
         @tasks = current_user.tasks.search_title(params[:task][:title]).page(params[:page]).per(5)
       elsif params[:task][:status].present?
         @tasks = current_user.tasks.search_status(params[:task][:status]).page(params[:page]).per(5)
+      elsif params[:task][:label_id].present?
+        @tasks = Task.all.joins(:labels).where(labels: {id: params[:task][:label_id]}).page(params[:page]).per(5)
       else
         @tasks = current_user.tasks.order(created_at: :DESC).page(params[:page]).per(5)
       end
