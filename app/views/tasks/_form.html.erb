@@ -35,7 +35,7 @@
       <td>
         <% Label.all.each do |label| %>
           <%= form.check_box :label_ids, { multiple: true, checked: label[:checked], disabled: label[:disabled], include_hidden: false}, label[:id] %>
-          <label><%= label.title %></label>
+          <%= form.label :label_ids, label.title, value: label[:id] %>
         <% end %>
       </td>
     </tr>

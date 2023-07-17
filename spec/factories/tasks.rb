@@ -5,6 +5,9 @@ FactoryBot.define do
     end_date { '2023-06-30' }
     status { '未着手' }
     priority { '低' }
+    after(:create) do |task|
+      create_list(:task_label, 1, task: task, label: create(:label1))
+    end
   end
 
   factory :task2, class: Task do
@@ -13,6 +16,9 @@ FactoryBot.define do
     end_date { '2023-06-29' }
     status { '着手中' }
     priority { '中' }
+    after(:create) do |task|
+      create_list(:task_label, 1, task: task, label: create(:label2))
+    end
   end
 
   factory :task3, class: Task do
@@ -21,6 +27,9 @@ FactoryBot.define do
     end_date { '2023-06-28' }
     status { '完了' }
     priority { '高' }
+    after(:create) do |task|
+      create_list(:task_label, 1, task: task, label: create(:label3))
+    end
   end
 
   factory :user, class: User do
