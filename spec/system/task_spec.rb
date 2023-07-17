@@ -9,6 +9,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         fill_in 'user[password]', with: 'testtest'
         fill_in 'user[password_confirmation]', with: 'testtest'
         click_on 'アカウントを作成'
+        sleep(0.2)
         # 1. new_task_pathに遷移する（新規作成ページに遷移する）
         visit new_task_path
         # ここにnew_task_pathにvisitする処理を書く
@@ -24,6 +25,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         # 3. 「登録する」というvalue（表記文字）のあるボタンをクリックする
         # ここに「登録する」というvalue（表記文字）のあるボタンをclick_onする（クリックする）する処理を書く
         click_on '登録する'
+        sleep(0.2)
         # 4. clickで登録されたはずの情報が、タスク詳細ページに表示されているかを確認する
         # （タスクが登録されたらタスク詳細画面に遷移されるという前提）
         # ここにタスク詳細ページに、テストコードで作成したデータがタスク詳細画面にhave_contentされているか（含まれているか）を確認（期待）するコードを書く
@@ -46,7 +48,7 @@ RSpec.describe 'タスク管理機能', type: :system do
       fill_in 'session[email]', with: 'test@gmail.com'
       fill_in 'session[password]', with: 'testtest'
       click_on 'ログイン'
-      sleep(0.5)
+      sleep(0.2)
     end
     context '一覧画面に遷移した場合' do
       it '作成済みのタスク一覧が表示される' do
@@ -79,7 +81,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         visit tasks_path
         # 「終了期限」というvalue（表記文字）のあるボタンをclick_onする（クリックする）
         click_on '終了期限'
-        sleep(0.5)
+        sleep(0.2)
         # タスクが終了期限の降順で表示されているかを確認する
         task_list = all('.task_list') 
         expect(task_list[0]).to have_content 'テスト_タイトル1'
@@ -93,7 +95,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         visit tasks_path
         # 「優先順位」というvalue（表記文字）のあるボタンをclick_onする（クリックする）
         click_on '優先順位'
-        sleep(0.5)
+        sleep(0.2)
         # タスクが優先順位の高い順で表示されているかを確認する
         task_list = all('.task_list') 
         expect(task_list[0]).to have_content 'テスト_タイトル3'
@@ -113,7 +115,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         fill_in 'session[email]', with: 'test@gmail.com'
         fill_in 'session[password]', with: 'testtest'
         click_on 'ログイン'
-        sleep(0.5)
+        sleep(0.2)
         # 引数taskを持ちながらタスク一覧ページに遷移
         visit task_path(task)
         # visitした（遷移した）page（タスク一覧ページ）に文字列が
@@ -137,7 +139,7 @@ RSpec.describe 'タスク管理機能', type: :system do
       fill_in 'session[email]', with: 'test@gmail.com'
       fill_in 'session[password]', with: 'testtest'
       click_on 'ログイン'
-      sleep(0.5)
+      sleep(0.2)
     end
     context 'タイトルであいまい検索をした場合' do
       it "検索キーワードを含むタスクが絞り込まれる" do
@@ -147,7 +149,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         fill_in 'task[title]', with: 'テスト'
         # 検索ボタンを押す
         click_on '検索'
-        sleep(0.5)
+        sleep(0.2)
         # 検索されたタスクが表示されているかを確認する
         expect(page).to have_content 'テスト_タイトル1'
         expect(page).to have_content 'テスト_タイトル2'
@@ -162,7 +164,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         select '未着手', from: 'task[status]'
         # 検索ボタンを押す
         click_on '検索'
-        sleep(0.5)
+        sleep(0.2)
         # 検索されたタスクが表示されているかを確認する
         expect(page).to have_content 'テスト_タイトル1'
       end
@@ -177,7 +179,7 @@ RSpec.describe 'タスク管理機能', type: :system do
         select '未着手', from: 'task[status]'
         # 検索ボタンを押す
         click_on '検索'
-        sleep(0.5)
+        sleep(0.2)
         # 検索されたタスクが表示されているかを確認する
         expect(page).to have_content 'テスト_タイトル1'
       end

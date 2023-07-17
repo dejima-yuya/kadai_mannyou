@@ -8,6 +8,7 @@
     <th>終了期限</th>
     <th>ステータス</th>
     <th>優先順位</th>
+    <th>ラベル</th>
   </tr>
 
   <tr>
@@ -16,6 +17,11 @@
     <td><%= @task.end_date %></td>
     <td><%= @task.status %></td>
     <td><%= @task.priority %></td>
+    <td>
+      <% @task.labels.each do |label| %>
+        <%= label.title %>
+      <% end %>
+    </td>
   </tr>
 </table>
 
