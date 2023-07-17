@@ -18,7 +18,6 @@
       <th>ステータス</th>
       <th>優先順位</th>
     </tr>
-
     <tr>
       <td><%= form.text_field :title %></td>
       <td><%= form.text_area :content %></td>
@@ -27,6 +26,22 @@
       <td><%= form.select :priority, Task.priorities.keys.map { |k| [t("enum.task.priority.#{k}"), k] } %></td>
     </tr>
   </table>
+
+  <table>
+    <tr>
+      <th align="left">ラベル</th>
+    </tr>
+    <tr>
+      <td>
+        <% Label.all.each do |label| %>
+          <%= form.check_box :label_ids, { multiple: true, checked: label[:checked], disabled: label[:disabled], include_hidden: false}, label[:id] %>
+          <label><%= label.title %></label>
+        <% end %>
+      </td>
+    </tr>
+  </table>
+
+  <br>
 
   <%= form.submit %>
 <% end %>
